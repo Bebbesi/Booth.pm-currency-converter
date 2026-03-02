@@ -79,7 +79,7 @@ function scanSubtree(root) {
   nodes.forEach(node => convertElement(node.parentElement));
 }
 
-// Full reset + rescan
+// Full reset + rescan.
 function fullRescan() {
   document.querySelectorAll('.booth-jpy-converted').forEach(el => el.remove());
   document.querySelectorAll('[' + CONVERTED_ATTR + ']').forEach(el => el.removeAttribute(CONVERTED_ATTR));
