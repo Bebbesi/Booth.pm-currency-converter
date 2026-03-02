@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOOTH JPY Converter</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: #fff;
+      color: #333;
+      width: 280px;
+      min-height: 200px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #fc4d50, #ff7a7c);
+      color: white;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-icon {
+      font-size: 20px;
+    }
+
+    .header h1 {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .header p {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    .body {
+      padding: 16px;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .toggle-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 22px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      border-radius: 22px;
+      transition: 0.2s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.2s;
+    }
+
+    input:checked + .slider {
+      background-color: #fc4d50;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(18px);
+    }
+
+    .field-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #333;
+      background: #fafafa;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #fc4d50;
+    }
+
+    .rate-info {
+      margin-top: 14px;
+      padding: 10px 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .rate-info .rate-value {
+      font-weight: 700;
+      color: #333;
+    }
+
+    .rate-info .rate-note {
+      color: #aaa;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .btn-refresh {
+      margin-top: 14px;
+      width: 100%;
+      padding: 9px;
+      border: none;
+      border-radius: 8px;
+      background: #fc4d50;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn-refresh:hover {
+      opacity: 0.88;
+    }
+
+    .btn-refresh:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .footer {
+      padding: 10px 16px;
+      border-top: 1px solid #f0f0f0;
+      font-size: 11px;
+      color: #bbb;
+      text-align: center;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ccc;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+    .status-dot.active { background: #4caf50; }
+    .status-dot.error { background: #f44336; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-icon">💱</div>
+    <div>
+      <h1>BOOTH JPY Converter</h1>
+      <p>Live exchange rates on booth.pm</p>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toggle-row">
+      <span class="toggle-label">Enable conversion</span>
+      <label class="toggle">
+        <input type="checkbox" id="enabledToggle" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="field-label">Preferred Currency</div>
+    <select id="currencySelect">
+      <option value="EUR">🇪🇺 EUR – Euro</option>
+      <option value="USD">🇺🇸 USD – US Dollar</option>
+      <option value="GBP">🇬🇧 GBP – British Pound</option>
+      <option value="CAD">🇨🇦 CAD – Canadian Dollar</option>
+      <option value="AUD">🇦🇺 AUD – Australian Dollar</option>
+      <option value="CHF">🇨🇭 CHF – Swiss Franc</option>
+      <option value="CNY">🇨🇳 CNY – Chinese Yuan</option>
+      <option value="KRW">🇰🇷 KRW – South Korean Won</option>
+      <option value="TWD">🇹🇼 TWD – New Taiwan Dollar</option>
+      <option value="SEK">🇸🇪 SEK – Swedish Krona</option>
+      <option value="NOK">🇳🇴 NOK – Norwegian Krone</option>
+      <option value="DKK">🇩🇰 DKK – Danish Krone</option>
+      <option value="SGD">🇸🇬 SGD – Singapore Dollar</option>
+      <option value="HKD">🇭🇰 HKD – Hong Kong Dollar</option>
+      <option value="MXN">🇲🇽 MXN – Mexican Peso</option>
+      <option value="BRL">🇧🇷 BRL – Brazilian Real</option>
+      <option value="INR">🇮🇳 INR – Indian Rupee</option>
+      <option value="PLN">🇵🇱 PLN – Polish Złoty</option>
+      <option value="THB">🇹🇭 THB – Thai Baht</option>
+    </select>
+
+    <div class="rate-info" id="rateInfo">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="rateText">Loading rate...</span>
+      <div class="rate-note" id="rateNote"></div>
+    </div>
+
+    <button class="btn-refresh" id="refreshBtn">↻ Refresh Rate</button>
+  </div>
+
+  <div class="footer">
+    Rates from exchangerate-api.com · cached 1h
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

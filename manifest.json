@@ -1,0 +1,37 @@
+{
+  "manifest_version": 2,
+  "name": "Booth JPY Converter",
+  "version": "1.0.0",
+  "description": "Converts JPY prices on booth.pm to your preferred currency, shown under each price",
+  "icons": {
+    "48": "icon48.png",
+    "96": "icon96.png"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "https://api.exchangerate-api.com/*",
+    "https://open.er-api.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.booth.pm/*",
+        "*://*.booth.pixiv.net/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_action": {
+    "default_icon": {
+      "48": "icon48.png"
+    },
+    "default_popup": "popup.html",
+    "default_title": "Booth JPY Converter"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  }
+}
