@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Booth JPY Converter</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;width:280px;background:#fff;color:#222}
+    header{background:#fc4d50;color:#fff;padding:14px 16px 12px}
+    header h1{font-size:15px;font-weight:700;letter-spacing:.02em}
+    header p{font-size:11px;opacity:.85;margin-top:2px}
+    .body{padding:16px}
+    label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+    select,input[type=text]{width:100%;padding:8px 10px;border:1.5px solid #ddd;border-radius:6px;font-size:14px;background:#fafafa;outline:none;transition:border-color .15s}
+    select:focus,input:focus{border-color:#fc4d50}
+    .row{margin-bottom:14px}
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .toggle-label{font-size:13px;font-weight:500}
+    .toggle{position:relative;width:40px;height:22px}
+    .toggle input{opacity:0;width:0;height:0}
+    .slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;border-radius:22px;transition:.2s}
+    .slider:before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.2s}
+    input:checked+.slider{background:#fc4d50}
+    input:checked+.slider:before{transform:translateX(18px)}
+    .rate-info{font-size:11px;color:#888;margin-top:4px;min-height:16px}
+    .save-btn{width:100%;padding:9px;background:#fc4d50;color:white;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;margin-top:4px}
+    .save-btn:hover{background:#e63d40}
+    .status{font-size:11px;color:#3a3;text-align:center;margin-top:8px;min-height:14px}
+    .custom-currency{display:none;margin-top:8px}
+    .custom-currency.visible{display:block}
+    footer{text-align:center;font-size:10px;color:#bbb;padding:8px 16px 12px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>&#128084; Booth JPY Converter</h1>
+    <p>Shows prices in your currency on booth.pm</p>
+  </header>
+  <div class="body">
+    <div class="toggle-row">
+      <span class="toggle-label">Enable conversion</span>
+      <label class="toggle">
+        <input type="checkbox" id="enabled" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="row">
+      <label for="currency">Convert JPY to</label>
+      <select id="currency">
+        <option value="USD">USD - US Dollar</option>
+        <option value="EUR">EUR - Euro</option>
+        <option value="GBP">GBP - British Pound</option>
+        <option value="CAD">CAD - Canadian Dollar</option>
+        <option value="AUD">AUD - Australian Dollar</option>
+        <option value="CHF">CHF - Swiss Franc</option>
+        <option value="CNY">CNY - Chinese Yuan</option>
+        <option value="KRW">KRW - Korean Won</option>
+        <option value="TWD">TWD - Taiwan Dollar</option>
+        <option value="HKD">HKD - Hong Kong Dollar</option>
+        <option value="SGD">SGD - Singapore Dollar</option>
+        <option value="MYR">MYR - Malaysian Ringgit</option>
+        <option value="THB">THB - Thai Baht</option>
+        <option value="PHP">PHP - Philippine Peso</option>
+        <option value="IDR">IDR - Indonesian Rupiah</option>
+        <option value="INR">INR - Indian Rupee</option>
+        <option value="BRL">BRL - Brazilian Real</option>
+        <option value="MXN">MXN - Mexican Peso</option>
+        <option value="SEK">SEK - Swedish Krona</option>
+        <option value="NOK">NOK - Norwegian Krone</option>
+        <option value="DKK">DKK - Danish Krone</option>
+        <option value="PLN">PLN - Polish Zloty</option>
+        <option value="CZK">CZK - Czech Koruna</option>
+        <option value="HUF">HUF - Hungarian Forint</option>
+        <option value="TRY">TRY - Turkish Lira</option>
+        <option value="ZAR">ZAR - South African Rand</option>
+        <option value="NZD">NZD - New Zealand Dollar</option>
+        <option value="OTHER">Other (enter code)</option>
+      </select>
+      <div class="custom-currency" id="customCurrencyWrap">
+        <input type="text" id="customCurrency" placeholder="e.g. AED, VND, CLP" maxlength="5">
+      </div>
+      <div class="rate-info" id="rateInfo"></div>
+    </div>
+    <button class="save-btn" id="saveBtn">Apply</button>
+    <div class="status" id="status"></div>
+  </div>
+  <footer>Rates from exchangerate-api.com · Updates hourly</footer>
+  <script src="popup.js"></script>
+</body>
+</html>
